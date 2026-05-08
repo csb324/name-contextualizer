@@ -3,9 +3,9 @@ import { useEffect, useRef } from 'react'
 // Replace these once AdSense approves the site:
 //   PUBLISHER_ID → your ca-pub-XXXXXXXXXXXXXXXX
 //   slot         → the ad unit slot ID from the AdSense dashboard
-const PUBLISHER_ID = 'ca-pub-XXXXXXXXXXXXXXXX'
+const PUBLISHER_ID = 'ca-pub-1812016008004987'
 
-export default function AdUnit({ slot = 'XXXXXXXXXX' }) {
+export default function AdUnit({ slot = '7098193754' }) {
   const pushed = useRef(false)
 
   useEffect(() => {
