@@ -1,0 +1,39 @@
+import Sparkline from './Sparkline'
+
+const GENDER_LABEL = { F: 'girl', M: 'boy' }
+
+export default function ComparisonTable({ comparables, comparisonYear, markerYear, allYears, allNameData, gender }) {
+  return (
+    <div className="comparison">
+      <h3>
+        {GENDER_LABEL[gender]} names with similar popularity in {comparisonYear}
+      </h3>
+      <table className="comparison-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>% in {comparisonYear}</th>
+            <th>Popularity over time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {comparables.map(comp => {
+            const sparkData = allYears.map(y => ({
+              year: y,
+              pct: allNameData?.[comp.name]?.[String(y)]?.[2] ?? null,
+            }))
+            return (
+              <tr key={comp.name}>
+                <td className="comp-name">{comp.name}</td>
+                <td className="comp-pct">{comp.pct.toFixed(2)}%</td>
+                <td className="comp-spark">
+                  <Sparkline data={sparkData} gender={gender} birthYear={markerYear} />
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
