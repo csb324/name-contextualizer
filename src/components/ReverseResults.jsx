@@ -1,7 +1,7 @@
 import { findStatsInYear, findComparables } from '../utils/nameData'
 import NameSection from './NameSection'
 
-export default function ReverseResults({ query, girlsData, boysData, byYearGirls, byYearBoys }) {
+export default function ReverseResults({ query, girlsData, boysData, byYearGirls, byYearBoys, onNameClick }) {
   const { name, birthYear } = query
   const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
   const latestYear = Math.max(...girlsData.years)
@@ -57,6 +57,7 @@ export default function ReverseResults({ query, girlsData, boysData, byYearGirls
           birthYear={birthYear}
           comparisonYear={latestYear}
           allYears={s.allYears}
+          onNameClick={onNameClick}
         />
       ))}
     </div>

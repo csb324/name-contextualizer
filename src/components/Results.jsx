@@ -1,7 +1,7 @@
 import { findLatestStats, findComparables } from '../utils/nameData'
 import NameSection from './NameSection'
 
-export default function Results({ query, girlsData, boysData, byYearGirls, byYearBoys }) {
+export default function Results({ query, girlsData, boysData, byYearGirls, byYearBoys, onNameClick }) {
   const { name, birthYear } = query
   const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
   const latestYear = Math.max(...girlsData.years)
@@ -55,6 +55,7 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
           tableDescription={s.tableDescription}
           birthYear={birthYear}
           allYears={s.allYears}
+          onNameClick={onNameClick}
         />
       ))}
     </div>

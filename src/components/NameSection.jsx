@@ -15,6 +15,7 @@ export default function NameSection({
   birthYear,
   comparisonYear,
   allYears,
+  onNameClick,
 }) {
   const label = GENDER_LABEL[gender]
   const cls = GENDER_CLASS[gender]
@@ -64,6 +65,7 @@ export default function NameSection({
           allYears={allYears}
           allNameData={allNameData}
           gender={gender}
+          onNameClick={onNameClick}
         />
       ) : (
         <p className="no-comparables">

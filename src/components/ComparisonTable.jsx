@@ -2,7 +2,7 @@ import Sparkline from './Sparkline'
 
 const GENDER_LABEL = { F: 'girl', M: 'boy' }
 
-export default function ComparisonTable({ tableDescription, comparables, comparisonYear, markerYear, allYears, allNameData, gender }) {
+export default function ComparisonTable({ tableDescription, comparables, comparisonYear, markerYear, allYears, allNameData, gender, onNameClick }) {
   return (
     <div className="comparison">
       <h3>
@@ -24,7 +24,11 @@ export default function ComparisonTable({ tableDescription, comparables, compari
             }))
             return (
               <tr key={comp.name}>
-                <td className="comp-name">{comp.name}</td>
+                <td className="comp-name">
+                  {onNameClick
+                    ? <button className="comp-name-btn" onClick={() => onNameClick(comp.name, markerYear)}>{comp.name}</button>
+                    : comp.name}
+                </td>
                 <td className="comp-pct">{comp.pct.toFixed(2)}%</td>
                 <td className="comp-spark">
                   <Sparkline data={sparkData} gender={gender} birthYear={markerYear} />

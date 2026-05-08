@@ -16,6 +16,11 @@ export default function App() {
     setQuery(null)
   }
 
+  function handleNameClick(name, birthYear, targetMode) {
+    setMode(targetMode)
+    setQuery({ name, birthYear })
+  }
+
   useEffect(() => {
     Promise.all([
       fetch('/data/girls.json').then(r => r.json()),
@@ -78,6 +83,7 @@ export default function App() {
                 boysData={boysData}
                 byYearGirls={byYearGirls}
                 byYearBoys={byYearBoys}
+                onNameClick={(name, birthYear) => handleNameClick(name, birthYear, 'reverse')}
               />
             )}
             {query && mode === 'reverse' && (
@@ -88,6 +94,7 @@ export default function App() {
                 boysData={boysData}
                 byYearGirls={byYearGirls}
                 byYearBoys={byYearBoys}
+                onNameClick={(name, birthYear) => handleNameClick(name, birthYear, 'forward')}
               />
             )}
           </>
