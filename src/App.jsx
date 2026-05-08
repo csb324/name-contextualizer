@@ -54,6 +54,7 @@ export default function App() {
   function handleNameClick(name) {
     if (!query) return
     navigate({ name, refYear: query.compareYear, compareYear: query.refYear })
+    setFormKey(k => k + 1)
   }
 
   const byYearGirls = useMemo(() => buildByYear(girlsData?.data), [girlsData])
