@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react'
 import SearchForm from './components/SearchForm'
 import Results from './components/Results'
 import ReverseResults from './components/ReverseResults'
-import AdUnit from './components/AdUnit'
 import { buildByYear } from './utils/nameData'
 
 export default function App() {
@@ -94,8 +93,6 @@ export default function App() {
           </>
         )}
       </main>
-
-      <AdUnit />
 
       <footer>
         <p>

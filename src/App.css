@@ -385,24 +385,6 @@ button[type='submit']:disabled {
   padding-top: 8px;
 }
 
-/* Ad unit */
-.ad-unit {
-  max-width: 880px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px 24px;
-}
-
-.ad-label {
-  display: block;
-  font-size: 0.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #ccc;
-  margin-bottom: 6px;
-}
-
 /* Footer */
 footer {
   text-align: center;
