@@ -16,7 +16,7 @@ export default function ReverseResults({ query, girlsData, boysData, byYearGirls
     stats: girlStats,
     nameData: girlsData.data[normalized],
     allNameData: girlsData.data,
-    comparables: findComparables(girlStats.pct, birthYear, byYearGirls, normalized),
+    comparables: findComparables(girlStats.pct, latestYear, byYearGirls, normalized),
     allYears: girlsData.years,
   })
   if (boyStats) sections.push({
@@ -25,7 +25,7 @@ export default function ReverseResults({ query, girlsData, boysData, byYearGirls
     stats: boyStats,
     nameData: boysData.data[normalized],
     allNameData: boysData.data,
-    comparables: findComparables(boyStats.pct, birthYear, byYearBoys, normalized),
+    comparables: findComparables(boyStats.pct, latestYear, byYearBoys, normalized),
     allYears: boysData.years,
   })
 
