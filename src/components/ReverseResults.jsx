@@ -55,6 +55,7 @@ export default function ReverseResults({ query, girlsData, boysData, byYearGirls
           comparables={s.comparables}
           tableDescription={s.tableDescription}
           birthYear={birthYear}
+          sparklineMarkerYear={latestYear}
           comparisonYear={latestYear}
           allYears={s.allYears}
           onNameClick={onNameClick}

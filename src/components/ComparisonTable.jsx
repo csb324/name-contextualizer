@@ -26,7 +26,7 @@ export default function ComparisonTable({ tableDescription, comparables, compari
               <tr key={comp.name}>
                 <td className="comp-name">
                   {onNameClick
-                    ? <button className="comp-name-btn" onClick={() => onNameClick(comp.name, markerYear)}>{comp.name}</button>
+                    ? <button className="comp-name-btn" onClick={() => onNameClick(comp.name)}>{comp.name}</button>
                     : comp.name}
                 </td>
                 <td className="comp-pct">{comp.pct.toFixed(2)}%</td>

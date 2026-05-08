@@ -54,6 +54,7 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
           comparables={s.comparables}
           tableDescription={s.tableDescription}
           birthYear={birthYear}
+          chartMarkerYear={latestYear}
           allYears={s.allYears}
           onNameClick={onNameClick}
         />

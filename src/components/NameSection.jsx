@@ -13,6 +13,8 @@ export default function NameSection({
   comparables,
   tableDescription,
   birthYear,
+  chartMarkerYear,
+  sparklineMarkerYear,
   comparisonYear,
   allYears,
   onNameClick,
@@ -52,7 +54,7 @@ export default function NameSection({
       <NameChart
         name={name}
         data={chartData}
-        birthYear={birthYear}
+        birthYear={chartMarkerYear ?? birthYear}
         gender={gender}
       />
 
@@ -61,11 +63,11 @@ export default function NameSection({
           tableDescription={tableDescription}
           comparables={comparables}
           comparisonYear={comparisonYear ?? birthYear}
-          markerYear={birthYear}
+          markerYear={sparklineMarkerYear ?? birthYear}
           allYears={allYears}
           allNameData={allNameData}
           gender={gender}
-          onNameClick={onNameClick}
+          onNameClick={onNameClick ? (name) => onNameClick(name, birthYear) : null}
         />
       ) : (
         <p className="no-comparables">
