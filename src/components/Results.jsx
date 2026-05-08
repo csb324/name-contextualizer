@@ -9,51 +9,54 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
   const girlStats = findLatestStats(normalized, girlsData.data, latestYear)
   const boyStats = findLatestStats(normalized, boysData.data, latestYear)
 
-  const girlComparables = girlStats
-    ? findComparables(girlStats.pct, birthYear, byYearGirls, normalized)
-    : []
-  const boyComparables = boyStats
-    ? findComparables(boyStats.pct, birthYear, byYearBoys, normalized)
-    : []
+  const sections = []
+  if (girlStats) sections.push({
+    gender: 'F',
+    stats: girlStats,
+    nameData: girlsData.data[normalized],
+    allNameData: girlsData.data,
+    comparables: findComparables(girlStats.pct, birthYear, byYearGirls, normalized),
+    tableDescription: `Names that were this popular in ${birthYear}`,
+    allYears: girlsData.years,
+  })
+  if (boyStats) sections.push({
+    gender: 'M',
+    stats: boyStats,
+    nameData: boysData.data[normalized],
+    allNameData: boysData.data,
+    comparables: findComparables(boyStats.pct, birthYear, byYearBoys, normalized),
+    tableDescription: `Names that were this popular in ${birthYear}`,
+    allYears: boysData.years,
+  })
+  sections.sort((a, b) => b.stats.pct - a.stats.pct)
 
-  if (!girlStats && !boyStats) {
+  if (sections.length === 0) {
     return (
       <div className="results">
         <p className="not-found">
-          "{normalized}" wasn't found in the top 1000 names in recent years.
+          "{normalized}" wasn't found in the top 1,000 names in recent years.
         </p>
       </div>
     )
   }
 
   return (
-    <div className="results">
-      {girlStats && (
+    <div className={`results${sections.length === 2 ? ' two-up' : ''}`}>
+      {sections.map(s => (
         <NameSection
+          key={s.gender}
           name={normalized}
-          gender="F"
-          stats={girlStats}
+          gender={s.gender}
+          stats={s.stats}
           latestYear={latestYear}
-          nameData={girlsData.data[normalized]}
-          allNameData={girlsData.data}
-          comparables={girlComparables}
+          nameData={s.nameData}
+          allNameData={s.allNameData}
+          comparables={s.comparables}
+          tableDescription={s.tableDescription}
           birthYear={birthYear}
-          allYears={girlsData.years}
+          allYears={s.allYears}
         />
-      )}
-      {boyStats && (
-        <NameSection
-          name={normalized}
-          gender="M"
-          stats={boyStats}
-          latestYear={latestYear}
-          nameData={boysData.data[normalized]}
-          allNameData={boysData.data}
-          comparables={boyComparables}
-          birthYear={birthYear}
-          allYears={boysData.years}
-        />
-      )}
+      ))}
     </div>
   )
 }

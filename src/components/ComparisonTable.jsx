@@ -2,11 +2,11 @@ import Sparkline from './Sparkline'
 
 const GENDER_LABEL = { F: 'girl', M: 'boy' }
 
-export default function ComparisonTable({ comparables, comparisonYear, markerYear, allYears, allNameData, gender }) {
+export default function ComparisonTable({ tableDescription, comparables, comparisonYear, markerYear, allYears, allNameData, gender }) {
   return (
     <div className="comparison">
       <h3>
-        {GENDER_LABEL[gender]} names with similar popularity in {comparisonYear}
+        { tableDescription }
       </h3>
       <table className="comparison-table">
         <thead>

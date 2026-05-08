@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Della+Respira&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -5,9 +7,10 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: #F8F5F0;
-  color: #1A1A2E;
+  font-family: 'Space Mono', monospace;
+  background: #fff;
+  color: #000;
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -19,63 +22,67 @@ body {
 
 /* Header */
 .app-header {
-  background: #fff;
-  padding: 28px 24px 20px;
+  padding: 3em 24px 1.5em;
   text-align: center;
 }
 
 .app-header h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #1A1A2E;
-  letter-spacing: -0.03em;
+  font-family: 'Della Respira', serif;
+  font-weight: 400;
+  font-size: 3.5em;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #000;
 }
-
 
 /* Tab bar */
 .tab-bar {
   display: flex;
-  background: #fff;
-  border-bottom: 1px solid #E8E4DF;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
   padding: 0 24px;
-  gap: 4px;
 }
 
 .tab-btn {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 14px 20px;
+  padding: 14px 24px;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   cursor: pointer;
   text-align: left;
-  color: #AAA;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: color 0.15s, border-color 0.15s;
-  line-height: 1.3;
+  color: #888;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: color 0.1s, border-color 0.1s;
   margin-bottom: -1px;
 }
 
 .tab-btn:hover {
-  color: #555;
+  color: #000;
+  background: none;
 }
 
 .tab-btn.active {
-  color: #1A1A2E;
-  border-bottom-color: #1A1A2E;
+  color: #000;
+  border-bottom-color: #099fb7;
 }
 
 .tab-desc {
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 400;
-  color: #BBB;
+  color: #bbb;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
 .tab-btn.active .tab-desc {
-  color: #888;
+  color: #666;
 }
 
 /* Main content */
@@ -84,16 +91,14 @@ main {
   max-width: 880px;
   width: 100%;
   margin: 0 auto;
-  padding: 36px 24px;
+  padding: 40px 24px;
 }
 
 /* Search form */
 .search-form {
-  background: #fff;
-  border-radius: 14px;
+  border: 1px solid #000;
   padding: 28px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 }
 
 .search-fields {
@@ -110,29 +115,30 @@ main {
 }
 
 .field label {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: #888;
+  color: #444;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.1em;
 }
 
 .field input,
 .field select {
   padding: 10px 14px;
-  border: 1.5px solid #DDD;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #1A1A2E;
+  border: 1px solid #000;
+  border-radius: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: #000;
   background: #fff;
   outline: none;
-  transition: border-color 0.15s;
   -webkit-appearance: none;
   appearance: none;
+  transition: border-color 0.1s;
 }
 
 .field select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23AAA' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 32px;
@@ -140,8 +146,8 @@ main {
 
 .field input:focus,
 .field select:focus {
-  border-color: #9B7DC8;
-  box-shadow: 0 0 0 3px rgba(155, 125, 200, 0.12);
+  border-color: #42b6c6;
+  box-shadow: none;
 }
 
 .field input {
@@ -150,24 +156,26 @@ main {
 
 button[type='submit'] {
   padding: 10px 28px;
-  background: #1A1A2E;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 0;
+  font-family: 'Della Respira', serif;
   font-size: 1rem;
-  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
   cursor: pointer;
-  transition: background 0.15s, opacity 0.15s;
-  white-space: nowrap;
   height: 42px;
+  transition: background 0.1s;
+  white-space: nowrap;
 }
 
 button[type='submit']:hover:not(:disabled) {
-  background: #2E2E4E;
+  background: #eee;
 }
 
 button[type='submit']:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -176,176 +184,178 @@ button[type='submit']:disabled {
   text-align: center;
   color: #888;
   padding: 48px 0;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .status.error {
-  color: #C44;
+  color: #ed625d;
 }
 
 .not-found {
   text-align: center;
   color: #888;
   padding: 48px 0;
-  font-size: 1.05rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 /* Results container */
 .results {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
 }
 
 /* Name section card */
 .name-section {
-  background: #fff;
-  border-radius: 14px;
+  border: 1px solid #000;
+  border-top-width: 3px;
   padding: 32px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
-  border-top: 3px solid transparent;
 }
 
 .name-section.girls {
-  border-top-color: #C96B85;
+  border-top-color: #ed625d;
 }
 
 .name-section.boys {
-  border-top-color: #4A86B8;
+  border-top-color: #03232d;
 }
 
 .section-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin-bottom: 22px;
+  font-family: 'Della Respira', serif;
+  font-weight: 400;
+  font-size: 2.2em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  letter-spacing: -0.02em;
+  gap: 14px;
 }
 
 .gender-badge {
-  font-size: 0.68rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.3em;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 3px 9px;
-  border-radius: 20px;
-  background: #F5F5F5;
-  color: #999;
-}
-
-.girls .gender-badge {
-  background: #F9EEF1;
-  color: #C96B85;
+  letter-spacing: 0.1em;
+  padding: 4px 8px;
+  border: 1px solid #ed625d;
+  color: #ed625d;
+  background: none;
+  vertical-align: middle;
 }
 
 .boys .gender-badge {
-  background: #EAF2F8;
-  color: #4A86B8;
+  border-color: #099fb7;
+  color: #099fb7;
 }
 
 /* Stats row */
 .stats-row {
   display: flex;
-  gap: 28px;
-  margin-bottom: 28px;
+  gap: 36px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
   align-items: baseline;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 24px;
 }
 
 .stat {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .stat-label {
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #AAA;
+  letter-spacing: 0.1em;
+  color: #888;
 }
 
 .stat-value {
-  font-size: 1.65rem;
-  font-weight: 800;
-  color: #1A1A2E;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #000;
   letter-spacing: -0.02em;
 }
 
 .stat-note {
-  font-size: 0.82rem;
-  color: #AAA;
+  font-size: 0.72rem;
+  color: #888;
   font-style: italic;
   align-self: center;
 }
 
 /* Chart */
 .name-chart {
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .chart-title {
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #AAA;
-  margin-bottom: 10px;
+  letter-spacing: 0.1em;
+  color: #888;
+  margin-bottom: 12px;
 }
 
 .chart-tooltip {
-  background: rgba(20, 20, 40, 0.88);
-  border-radius: 7px;
+  background: #000;
   padding: 8px 12px;
   color: #fff;
-  font-size: 0.82rem;
-  backdrop-filter: blur(4px);
+  font-family: 'Space Mono', monospace;
 }
 
 .tooltip-year {
-  font-size: 0.72rem;
-  color: #CCC;
+  font-size: 0.65rem;
+  color: #aaa;
   margin-bottom: 2px;
 }
 
 .tooltip-pct {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
 /* Comparison table */
 .comparison h3 {
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #AAA;
+  letter-spacing: 0.1em;
+  color: #888;
   margin-bottom: 14px;
 }
 
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
 }
 
 .comparison-table th {
   text-align: left;
   padding: 7px 12px;
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #BBB;
-  border-bottom: 1px solid #EEE;
+  letter-spacing: 0.1em;
+  color: #888;
+  border-bottom: 1px solid #000;
 }
 
 .comparison-table td {
-  padding: 11px 12px;
-  border-bottom: 1px solid #F5F5F5;
+  padding: 12px 12px;
+  border-bottom: 1px solid #eee;
   vertical-align: middle;
 }
 
@@ -355,14 +365,13 @@ button[type='submit']:disabled {
 
 .comp-name {
   font-weight: 700;
-  font-size: 1rem;
-  color: #1A1A2E;
+  font-size: 0.9rem;
 }
 
 .comp-pct {
-  color: #666;
+  color: #555;
   font-variant-numeric: tabular-nums;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .comp-spark {
@@ -370,9 +379,9 @@ button[type='submit']:disabled {
 }
 
 .no-comparables {
-  color: #AAA;
+  color: #888;
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   padding-top: 8px;
 }
 
@@ -380,14 +389,15 @@ button[type='submit']:disabled {
 footer {
   text-align: center;
   padding: 28px 24px;
-  color: #BBB;
-  font-size: 0.8rem;
-  border-top: 1px solid #E8E4DF;
-  margin-top: auto;
+  color: #888;
+  font-size: 0.7rem;
+  border-top: 1px solid #000;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
 }
 
 footer a {
-  color: #AAA;
+  color: #03889e;
   text-decoration: none;
 }
 
@@ -395,18 +405,39 @@ footer a:hover {
   text-decoration: underline;
 }
 
+/* Side-by-side on desktop when both genders present */
+@media (min-width: 720px) {
+  .results.two-up {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .results.two-up .name-section {
+    flex: 1;
+    min-width: 0;
+  }
+
+  main:has(.results.two-up) {
+    max-width: 1120px;
+  }
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .app-header h1 {
-    font-size: 1.5rem;
+    font-size: 2.2em;
   }
 
   main {
-    padding: 24px 16px;
+    padding: 28px 16px;
   }
 
   .name-section {
     padding: 22px 18px;
+  }
+
+  .section-title {
+    font-size: 1.6em;
   }
 
   .stats-row {
@@ -414,6 +445,10 @@ footer a:hover {
   }
 
   .stat-value {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
+  }
+
+  .tab-btn {
+    padding: 12px 14px;
   }
 }

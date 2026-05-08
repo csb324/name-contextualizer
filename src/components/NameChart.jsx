@@ -9,7 +9,7 @@ import {
   CartesianGrid,
 } from 'recharts'
 
-const COLORS = { F: '#C96B85', M: '#4A86B8' }
+const COLORS = { F: '#ed625d', M: '#099fb7' }
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
@@ -33,7 +33,7 @@ export default function NameChart({ name, data, birthYear, gender }) {
       <h3 className="chart-title">Popularity of {name} over time</h3>
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={data} margin={{ top: 8, right: 20, bottom: 0, left: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#F0EDE8" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#eee" vertical={false} />
           <XAxis
             dataKey="year"
             tick={{ fontSize: 11, fill: '#AAA' }}
@@ -49,7 +49,7 @@ export default function NameChart({ name, data, birthYear, gender }) {
             width={38}
             domain={[0, yMax * 1.15]}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#DDD' }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#ccc' }} />
           {birthYear && (
             <ReferenceLine
               x={birthYear}

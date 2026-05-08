@@ -11,6 +11,7 @@ export default function NameSection({
   nameData,
   allNameData,
   comparables,
+  tableDescription,
   birthYear,
   comparisonYear,
   allYears,
@@ -56,6 +57,7 @@ export default function NameSection({
 
       {comparables.length > 0 ? (
         <ComparisonTable
+          tableDescription={tableDescription}
           comparables={comparables}
           comparisonYear={comparisonYear ?? birthYear}
           markerYear={birthYear}

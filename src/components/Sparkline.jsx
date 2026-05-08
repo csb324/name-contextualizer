@@ -1,4 +1,4 @@
-const COLORS = { F: '#C96B85', M: '#4A86B8' }
+const COLORS = { F: '#ed625d', M: '#099fb7' }
 
 export default function Sparkline({ data, gender = 'F', width = 88, height = 28, birthYear }) {
   const values = data.filter(d => d.pct !== null).map(d => d.pct)
@@ -48,7 +48,7 @@ export default function Sparkline({ data, gender = 'F', width = 88, height = 28,
           y1={0}
           x2={markerX.toFixed(1)}
           y2={height}
-          stroke="#CCC"
+          stroke="#bbb"
           strokeWidth="1"
           strokeDasharray="2 2"
         />
