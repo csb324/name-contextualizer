@@ -95,6 +95,7 @@ export default function App() {
       </main>
 
       <footer>
+        <p>Made with love by Clara Beyer Bower.</p>
         <p>
           Data:{' '}
           <a
