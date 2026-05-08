@@ -3,11 +3,23 @@ import SearchForm from './components/SearchForm'
 import Results from './components/Results'
 import { buildByYear } from './utils/nameData'
 
+function queryFromURL() {
+  const p = new URLSearchParams(window.location.search)
+  const name = p.get('name')
+  const ref = p.get('ref')
+  const compare = p.get('compare')
+  if (name && ref && compare) {
+    return { name, refYear: parseInt(ref, 10), compareYear: parseInt(compare, 10) }
+  }
+  return null
+}
+
 export default function App() {
   const [girlsData, setGirlsData] = useState(null)
   const [boysData, setBoysData] = useState(null)
   const [loadError, setLoadError] = useState(null)
-  const [query, setQuery] = useState(null)
+  const [query, setQuery] = useState(() => queryFromURL())
+  const [formKey, setFormKey] = useState(0)
 
   useEffect(() => {
     Promise.all([
@@ -23,16 +35,32 @@ export default function App() {
       )
   }, [])
 
+  useEffect(() => {
+    function onPop() {
+      const q = queryFromURL()
+      setQuery(q)
+      setFormKey(k => k + 1)
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
+  function navigate(q) {
+    const p = new URLSearchParams({ name: q.name, ref: q.refYear, compare: q.compareYear })
+    window.history.pushState(null, '', `?${p}`)
+    setQuery(q)
+  }
+
+  function handleNameClick(name) {
+    if (!query) return
+    navigate({ name, refYear: query.compareYear, compareYear: query.refYear })
+  }
+
   const byYearGirls = useMemo(() => buildByYear(girlsData?.data), [girlsData])
   const byYearBoys = useMemo(() => buildByYear(boysData?.data), [boysData])
 
   const years = girlsData?.years || []
   const loading = !girlsData && !loadError
-
-  function handleNameClick(name) {
-    if (!query) return
-    setQuery({ name, refYear: query.compareYear, compareYear: query.refYear })
-  }
 
   return (
     <div className="app">
@@ -45,7 +73,7 @@ export default function App() {
         {loadError && <p className="status error">{loadError}</p>}
         {!loading && !loadError && (
           <>
-            <SearchForm years={years} onSearch={setQuery} />
+            <SearchForm key={formKey} years={years} onSearch={navigate} initialQuery={query} />
             {query && (
               <Results
                 key={`${query.name}-${query.refYear}-${query.compareYear}`}
