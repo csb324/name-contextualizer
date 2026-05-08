@@ -63,6 +63,9 @@ export default function App() {
 
       <footer>
         <p>
+          Made with love by Clara Beyer Bower.
+        </p>
+        <p>
           Data:{' '}
           <a
             href="https://www.ssa.gov/oact/babynames/"
