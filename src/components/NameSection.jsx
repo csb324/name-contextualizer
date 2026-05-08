@@ -67,7 +67,7 @@ export default function NameSection({
           allYears={allYears}
           allNameData={allNameData}
           gender={gender}
-          onNameClick={onNameClick ? (name) => onNameClick(name, birthYear) : null}
+          onNameClick={onNameClick}
         />
       ) : (
         <p className="no-comparables">

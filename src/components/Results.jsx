@@ -1,13 +1,19 @@
-import { findLatestStats, findComparables } from '../utils/nameData'
+import { findStatsInYear, findComparables } from '../utils/nameData'
 import NameSection from './NameSection'
 
-export default function Results({ query, girlsData, boysData, byYearGirls, byYearBoys, onNameClick }) {
-  const { name, birthYear } = query
-  const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
-  const latestYear = Math.max(...girlsData.years)
+const MODERN_CUTOFF = 1975
 
-  const girlStats = findLatestStats(normalized, girlsData.data, latestYear)
-  const boyStats = findLatestStats(normalized, boysData.data, latestYear)
+export default function Results({ query, girlsData, boysData, byYearGirls, byYearBoys, onNameClick }) {
+  const { name, refYear, compareYear } = query
+  const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+
+  const showFullRange = refYear <= MODERN_CUTOFF || compareYear <= MODERN_CUTOFF
+  const displayYears = showFullRange
+    ? girlsData.years
+    : girlsData.years.filter(y => y >= MODERN_CUTOFF)
+
+  const girlStats = findStatsInYear(normalized, girlsData.data, refYear)
+  const boyStats = findStatsInYear(normalized, boysData.data, refYear)
 
   const sections = []
   if (girlStats) sections.push({
@@ -15,18 +21,16 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
     stats: girlStats,
     nameData: girlsData.data[normalized],
     allNameData: girlsData.data,
-    comparables: findComparables(girlStats.pct, birthYear, byYearGirls, normalized),
-    tableDescription: `Names that were this popular in ${birthYear}`,
-    allYears: girlsData.years,
+    comparables: findComparables(girlStats.pct, compareYear, byYearGirls, normalized),
+    tableDescription: `Names this popular in ${compareYear}`,
   })
   if (boyStats) sections.push({
     gender: 'M',
     stats: boyStats,
     nameData: boysData.data[normalized],
     allNameData: boysData.data,
-    comparables: findComparables(boyStats.pct, birthYear, byYearBoys, normalized),
-    tableDescription: `Names that were this popular in ${birthYear}`,
-    allYears: boysData.years,
+    comparables: findComparables(boyStats.pct, compareYear, byYearBoys, normalized),
+    tableDescription: `Names this popular in ${compareYear}`,
   })
   sections.sort((a, b) => b.stats.pct - a.stats.pct)
 
@@ -34,7 +38,7 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
     return (
       <div className="results">
         <p className="not-found">
-          "{normalized}" wasn't found in the top 1,000 names in recent years.
+          "{normalized}" wasn't in the top 1,000 names in {refYear}.
         </p>
       </div>
     )
@@ -48,14 +52,15 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
           name={normalized}
           gender={s.gender}
           stats={s.stats}
-          latestYear={latestYear}
           nameData={s.nameData}
           allNameData={s.allNameData}
           comparables={s.comparables}
           tableDescription={s.tableDescription}
-          birthYear={birthYear}
-          chartMarkerYear={latestYear}
-          allYears={s.allYears}
+          birthYear={refYear}
+          chartMarkerYear={refYear}
+          sparklineMarkerYear={compareYear}
+          comparisonYear={compareYear}
+          allYears={displayYears}
           onNameClick={onNameClick}
         />
       ))}

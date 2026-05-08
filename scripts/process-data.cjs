@@ -13,7 +13,7 @@ const EXTRACT_DIR = path.join(TMP_DIR, 'names_data');
 const OUTPUT_DIR = path.join(ROOT, 'public', 'data');
 
 const ZIP_URL = 'https://www.ssa.gov/oact/babynames/names.zip';
-const START_YEAR = 1975;
+const START_YEAR = 1925;
 const TOP_N = 1000;
 
 function ensureDir(dir) {

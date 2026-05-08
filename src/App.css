@@ -35,54 +35,23 @@ body {
   color: #000;
 }
 
-/* Tab bar */
-.tab-bar {
-  display: flex;
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
-  padding: 0 24px;
-}
-
-.tab-btn {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 14px 24px;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
+/* Swap button */
+.swap-btn {
+  padding: 10px 14px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 0;
+  font-size: 1.1rem;
   cursor: pointer;
-  text-align: left;
-  color: #888;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: color 0.1s, border-color 0.1s;
-  margin-bottom: -1px;
+  height: 42px;
+  align-self: flex-end;
+  transition: background 0.1s;
+  line-height: 1;
 }
 
-.tab-btn:hover {
-  color: #000;
-  background: none;
-}
-
-.tab-btn.active {
-  color: #000;
-  border-bottom-color: #099fb7;
-}
-
-.tab-desc {
-  font-size: 0.6rem;
-  font-weight: 400;
-  color: #bbb;
-  text-transform: none;
-  letter-spacing: 0.02em;
-}
-
-.tab-btn.active .tab-desc {
-  color: #666;
+.swap-btn:hover {
+  background: #eee;
 }
 
 /* Main content */
@@ -469,7 +438,4 @@ footer a:hover {
     font-size: 1.4rem;
   }
 
-  .tab-btn {
-    padding: 12px 14px;
-  }
 }

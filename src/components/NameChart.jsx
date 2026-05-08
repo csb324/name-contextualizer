@@ -27,6 +27,7 @@ export default function NameChart({ name, data, birthYear, gender }) {
   if (!hasData) return null
 
   const yMax = Math.max(...data.filter(d => d.pct !== null).map(d => d.pct))
+  const xInterval = data.length > 60 ? 9 : 4
 
   return (
     <div className="name-chart">
@@ -39,7 +40,7 @@ export default function NameChart({ name, data, birthYear, gender }) {
             tick={{ fontSize: 11, fill: '#AAA' }}
             tickLine={false}
             axisLine={false}
-            interval={4}
+            interval={xInterval}
           />
           <YAxis
             tickFormatter={v => `${v}%`}
