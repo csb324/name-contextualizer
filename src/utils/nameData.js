@@ -110,7 +110,19 @@ export function findSimilarTrajectory(targetYearData, refYear, allNameData, comp
         bestMatchPct = yearData[String(anchorYear)]?.[2] ?? null
       }
     }
-    if (bestScore >= 0) results.push({ name, matchYear: bestMatchYear, score: bestScore, pct: bestMatchPct })
+    if (bestScore >= 0) {
+      let pct = bestMatchPct
+      let matchYear = bestMatchYear
+      // If the best anchor year has no data (e.g. beyond the latest available year),
+      // walk back to the nearest year that does so we can display a real pct.
+      if (pct == null) {
+        for (let y = bestMatchYear - 1; y >= bestMatchYear - maxOffset; y--) {
+          const entry = yearData[String(y)]
+          if (entry) { pct = entry[2]; matchYear = y; break }
+        }
+      }
+      results.push({ name, matchYear, score: bestScore, pct })
+    }
   }
 
   return results.sort((a, b) => b.score - a.score).slice(0, limit)

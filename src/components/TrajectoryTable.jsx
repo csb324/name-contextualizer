@@ -27,7 +27,7 @@ export default function TrajectoryTable({ compareYear, matches, allYears, allNam
                 </td>
                 <td className="comp-pct">
                   {match.pct != null ? `${match.pct.toFixed(2)}%` : '—'}
-                  {match.matchYear !== compareYear && (
+                  {(match.matchYear !== compareYear || match.matchYear === allYears.at(-1)) && (
                     <span className="match-year"> ({match.matchYear})</span>
                   )}
                 </td>
