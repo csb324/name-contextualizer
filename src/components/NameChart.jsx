@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import {
   LineChart,
   Line,
@@ -13,7 +13,7 @@ import {
 const COLORS = { F: '#ed625d', M: '#099fb7' }
 const PREDICTION_COLORS = { F: '#f5b5b0', M: '#6cc8d8' }
 
-function CustomTooltip({ active, payload, label, predictionColor }) {
+function CustomTooltip({ active, payload, label, predictionColor, connectionYear }) {
   if (!active || !payload?.length) return null
   const real = payload.find(p => p.dataKey === 'pct')
   const pred = payload.find(p => p.dataKey === 'predicted')
@@ -21,7 +21,7 @@ function CustomTooltip({ active, payload, label, predictionColor }) {
     <div className="chart-tooltip">
       <p className="tooltip-year">{label}</p>
       {real?.value != null && <p className="tooltip-pct">{real.value.toFixed(2)}%</p>}
-      {pred?.value != null && (
+      {pred?.value != null && label !== connectionYear && (
         <p className="tooltip-pct" style={{ color: predictionColor }}>
           {pred.value.toFixed(2)}% predicted
         </p>
@@ -32,12 +32,30 @@ function CustomTooltip({ active, payload, label, predictionColor }) {
 
 export default function NameChart({ name, data, birthYear, gender, predictionData }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [showInfo, setShowInfo] = useState(false)
+  const infoRef = useRef(null)
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    if (!showInfo) return
+    function onClickOutside(e) {
+      if (infoRef.current && !infoRef.current.contains(e.target)) setShowInfo(false)
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setShowInfo(false)
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [showInfo])
 
   const color = COLORS[gender] || COLORS.F
   const predColor = PREDICTION_COLORS[gender] || PREDICTION_COLORS.F
@@ -69,9 +87,29 @@ export default function NameChart({ name, data, birthYear, gender, predictionDat
       <h3 className="chart-title">
         Popularity of {name} over time
         {predictionData?.length > 0 && (
-          <span className="chart-prediction-legend" style={{ color: predColor }}>
-            {' '}· · predicted
-          </span>
+          <>
+            <span className="chart-prediction-legend" style={{ color: predColor }}>
+              {' '}· · predicted
+            </span>
+            <span className="chart-info-wrapper" ref={infoRef}>
+              <button
+                className="chart-info-btn"
+                onClick={() => setShowInfo(v => !v)}
+                aria-label="About the prediction"
+                aria-expanded={showInfo}
+              >
+                ⓘ
+              </button>
+              {showInfo && (
+                <div className="chart-info-popover" role="tooltip">
+                  The dashed line shows where this name might be headed over the next 5 years.
+                  To predict it, we searched our entire dataset for names from the past that had the same
+                  trajectory — rising or falling at the same speed, from a similar level of popularity —
+                  then averaged what actually happened to those names in the years that followed.
+                </div>
+              )}
+            </span>
+          </>
         )}
       </h3>
       <ResponsiveContainer width="100%" height={200}>
@@ -79,20 +117,20 @@ export default function NameChart({ name, data, birthYear, gender, predictionDat
           <CartesianGrid strokeDasharray="3 3" stroke="#eee" vertical={false} />
           <XAxis
             dataKey="year"
-            tick={{ fontSize: 11, fill: '#AAA' }}
+            tick={{ fontSize: 12, fill: '#767676' }}
             tickLine={false}
             axisLine={false}
             interval={xInterval}
           />
           <YAxis
             tickFormatter={v => `${v}%`}
-            tick={{ fontSize: 11, fill: '#AAA' }}
+            tick={{ fontSize: 12, fill: '#767676' }}
             tickLine={false}
             axisLine={false}
             width={38}
             domain={[0, yMax * 1.15]}
           />
-          <Tooltip content={<CustomTooltip predictionColor={predColor} />} cursor={{ stroke: '#ccc' }} />
+          <Tooltip content={<CustomTooltip predictionColor={predColor} connectionYear={birthYear} />} cursor={{ stroke: '#ccc' }} />
           {birthYear && (
             <ReferenceLine
               x={birthYear}
@@ -101,8 +139,8 @@ export default function NameChart({ name, data, birthYear, gender, predictionDat
               label={{
                 value: `'${String(birthYear).slice(2)}`,
                 position: 'insideTopRight',
-                fontSize: 10,
-                fill: '#BBB',
+                fontSize: 11,
+                fill: '#999',
               }}
             />
           )}
