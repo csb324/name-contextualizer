@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import NameChart from './NameChart'
 import ComparisonTable from './ComparisonTable'
+import TrajectoryTable from './TrajectoryTable'
 
 const GENDER_LABEL = { F: 'girl', M: 'boy' }
 const GENDER_CLASS = { F: 'girls', M: 'boys' }
@@ -11,6 +13,8 @@ export default function NameSection({
   nameData,
   allNameData,
   comparables,
+  trajectoryMatches,
+  predictionData,
   tableDescription,
   birthYear,
   chartMarkerYear,
@@ -19,8 +23,12 @@ export default function NameSection({
   allYears,
   onNameClick,
 }) {
+  const [activeTab, setActiveTab] = useState('common')
+  const [trendingTooltip, setTrendingTooltip] = useState(false)
   const label = GENDER_LABEL[gender]
   const cls = GENDER_CLASS[gender]
+  const effectiveYear = comparisonYear ?? birthYear
+  const hasTrending = trajectoryMatches?.length > 0
 
   const chartData = allYears.map(y => ({
     year: y,
@@ -56,19 +64,68 @@ export default function NameSection({
         data={chartData}
         birthYear={chartMarkerYear ?? birthYear}
         gender={gender}
+        predictionData={predictionData}
       />
 
       {comparables.length > 0 ? (
-        <ComparisonTable
-          tableDescription={tableDescription}
-          comparables={comparables}
-          comparisonYear={comparisonYear ?? birthYear}
-          markerYear={sparklineMarkerYear ?? birthYear}
-          allYears={allYears}
-          allNameData={allNameData}
-          gender={gender}
-          onNameClick={onNameClick}
-        />
+        <>
+          <div className="tab-buttons">
+            <button
+              className={`tab-btn${activeTab === 'common' ? ' active' : ''}`}
+              onClick={() => setActiveTab('common')}
+            >
+              Similarly Common in {effectiveYear}
+            </button>
+            {hasTrending ? (
+              <button
+                className={`tab-btn${activeTab === 'trending' ? ' active' : ''}`}
+                onClick={() => setActiveTab('trending')}
+              >
+                Similarly Trending in {effectiveYear}
+              </button>
+            ) : (
+              <span
+                className="tab-btn-wrapper"
+                onMouseEnter={() => setTrendingTooltip(true)}
+                onMouseLeave={() => setTrendingTooltip(false)}
+                onClick={() => setTrendingTooltip(v => !v)}
+              >
+                <button className="tab-btn" disabled>
+                  Similarly Trending in {effectiveYear}
+                </button>
+                {trendingTooltip && (
+                  <div className="tab-tooltip">
+                    Not enough data to find similarly trending names
+                  </div>
+                )}
+              </span>
+            )}
+          </div>
+          {activeTab === 'common' && (
+            <ComparisonTable
+              tableDescription={tableDescription}
+              comparables={comparables}
+              comparisonYear={effectiveYear}
+              markerYear={sparklineMarkerYear ?? birthYear}
+              allYears={allYears}
+              allNameData={allNameData}
+              gender={gender}
+              onNameClick={onNameClick}
+              hideHeading
+            />
+          )}
+          {activeTab === 'trending' && hasTrending && (
+            <TrajectoryTable
+              compareYear={effectiveYear}
+              matches={trajectoryMatches}
+              allYears={allYears}
+              allNameData={allNameData}
+              gender={gender}
+              onNameClick={onNameClick}
+              hideHeading
+            />
+          )}
+        </>
       ) : (
         <p className="no-comparables">
           No comparable {label} names found in {birthYear}.

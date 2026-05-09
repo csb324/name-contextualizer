@@ -2,12 +2,10 @@ import Sparkline from './Sparkline'
 
 const GENDER_LABEL = { F: 'girl', M: 'boy' }
 
-export default function ComparisonTable({ tableDescription, comparables, comparisonYear, markerYear, allYears, allNameData, gender, onNameClick }) {
+export default function ComparisonTable({ tableDescription, comparables, comparisonYear, markerYear, allYears, allNameData, gender, onNameClick, hideHeading }) {
   return (
     <div className="comparison">
-      <h3>
-        { tableDescription }
-      </h3>
+      {!hideHeading && <h3>{tableDescription}</h3>}
       <table className="comparison-table">
         <thead>
           <tr>

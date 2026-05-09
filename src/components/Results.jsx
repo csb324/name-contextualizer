@@ -1,4 +1,4 @@
-import { findStatsInYear, findComparables } from '../utils/nameData'
+import { findStatsInYear, findComparables, findSimilarTrajectory, findBestAnalogues, computePrediction } from '../utils/nameData'
 import NameSection from './NameSection'
 
 const MODERN_CUTOFF = 1975
@@ -16,22 +16,37 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
   const boyStats = findStatsInYear(normalized, boysData.data, refYear)
 
   const sections = []
-  if (girlStats) sections.push({
-    gender: 'F',
-    stats: girlStats,
-    nameData: girlsData.data[normalized],
-    allNameData: girlsData.data,
-    comparables: findComparables(girlStats.pct, compareYear, byYearGirls, normalized),
-    tableDescription: `Names this popular in ${compareYear}`,
-  })
-  if (boyStats) sections.push({
-    gender: 'M',
-    stats: boyStats,
-    nameData: boysData.data[normalized],
-    allNameData: boysData.data,
-    comparables: findComparables(boyStats.pct, compareYear, byYearBoys, normalized),
-    tableDescription: `Names this popular in ${compareYear}`,
-  })
+
+  if (girlStats) {
+    const girlNameData = girlsData.data[normalized]
+    const girlTrajectoryMatches = findSimilarTrajectory(girlNameData, refYear, girlsData.data, compareYear, normalized, 15, 5, 5)
+    const girlAnalogues = findBestAnalogues(girlNameData, refYear, girlsData.data, normalized)
+    sections.push({
+      gender: 'F',
+      stats: girlStats,
+      nameData: girlNameData,
+      allNameData: girlsData.data,
+      comparables: findComparables(girlStats.pct, compareYear, byYearGirls, normalized),
+      trajectoryMatches: girlTrajectoryMatches,
+      predictionData: computePrediction(girlNameData, refYear, girlsData.data, girlAnalogues),
+      tableDescription: `Names this popular in ${compareYear}`,
+    })
+  }
+  if (boyStats) {
+    const boyNameData = boysData.data[normalized]
+    const boyTrajectoryMatches = findSimilarTrajectory(boyNameData, refYear, boysData.data, compareYear, normalized, 15, 5, 5)
+    const boyAnalogues = findBestAnalogues(boyNameData, refYear, boysData.data, normalized)
+    sections.push({
+      gender: 'M',
+      stats: boyStats,
+      nameData: boyNameData,
+      allNameData: boysData.data,
+      comparables: findComparables(boyStats.pct, compareYear, byYearBoys, normalized),
+      trajectoryMatches: boyTrajectoryMatches,
+      predictionData: computePrediction(boyNameData, refYear, boysData.data, boyAnalogues),
+      tableDescription: `Names this popular in ${compareYear}`,
+    })
+  }
   sections.sort((a, b) => b.stats.pct - a.stats.pct)
 
   if (sections.length === 0) {
@@ -55,6 +70,8 @@ export default function Results({ query, girlsData, boysData, byYearGirls, byYea
           nameData={s.nameData}
           allNameData={s.allNameData}
           comparables={s.comparables}
+          trajectoryMatches={s.trajectoryMatches}
+          predictionData={s.predictionData}
           tableDescription={s.tableDescription}
           birthYear={refYear}
           chartMarkerYear={refYear}
