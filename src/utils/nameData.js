@@ -206,8 +206,6 @@ export function computePrediction(targetYearData, refYear, allNameData, matches,
   if (!baseTargetPct || !matches?.length) return null
 
   const predictions = []
-  console.log(targetYearData);
-  // predictions.push({ year: refYear, pct: allNameData[]?.[String(refYear)]?.[2]});
   for (let k = 0; k <= horizonYears; k++) {
     let weightedSum = 0, totalWeight = 0
     for (const match of matches) {
