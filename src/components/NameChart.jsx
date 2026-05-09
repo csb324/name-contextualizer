@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import {
   LineChart,
   Line,
@@ -22,12 +23,21 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 export default function NameChart({ name, data, birthYear, gender }) {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const color = COLORS[gender] || COLORS.F
   const hasData = data.some(d => d.pct !== null)
   if (!hasData) return null
 
   const yMax = Math.max(...data.filter(d => d.pct !== null).map(d => d.pct))
-  const xInterval = data.length > 60 ? 9 : 4
+  const isMobile = windowWidth < 640
+  const xInterval = data.length > 60 ? (isMobile ? 19 : 9) : (isMobile ? 9 : 4)
 
   return (
     <div className="name-chart">
