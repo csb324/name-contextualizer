@@ -415,7 +415,7 @@ footer a:hover {
 /* Responsive */
 @media (max-width: 600px) {
   .app-header h1 {
-    font-size: 2.2em;
+    font-size: 1.2em;
   }
 
   main {

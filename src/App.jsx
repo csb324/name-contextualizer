@@ -66,7 +66,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Name Contextualizer</h1>
+        <h1>Baby Name Contextualizer</h1>
       </header>
 
       <main>
