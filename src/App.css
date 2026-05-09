@@ -125,7 +125,7 @@ main {
 
 button[type='submit'] {
   padding: 10px 28px;
-  background: #099fb7;
+  background:  #42b6c6;
   color: #fff;
   border: 0px solid #000;
   border-radius: 0;
@@ -140,7 +140,7 @@ button[type='submit'] {
 }
 
 button[type='submit']:hover:not(:disabled) {
-  background: #eee;
+  background: #099fb7;
 }
 
 button[type='submit']:disabled {
