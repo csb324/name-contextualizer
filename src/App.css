@@ -338,6 +338,12 @@ button[type='submit']:focus-visible {
   font-weight: 700;
 }
 
+.tooltip-rank {
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-top: 1px;
+}
+
 /* Comparison tabs */
 .tab-buttons {
   display: flex;

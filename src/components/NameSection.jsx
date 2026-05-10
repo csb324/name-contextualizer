@@ -32,6 +32,7 @@ export default function NameSection({
 
   const chartData = allYears.map(y => ({
     year: y,
+    rank: nameData?.[String(y)]?.[0] ?? null,
     pct: nameData?.[String(y)]?.[2] ?? null,
   }))
 

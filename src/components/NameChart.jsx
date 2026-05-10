@@ -17,10 +17,16 @@ function CustomTooltip({ active, payload, label, predictionColor, connectionYear
   if (!active || !payload?.length) return null
   const real = payload.find(p => p.dataKey === 'pct')
   const pred = payload.find(p => p.dataKey === 'predicted')
+  const rank = payload[0]?.payload?.rank
   return (
     <div className="chart-tooltip">
       <p className="tooltip-year">{label}</p>
-      {real?.value != null && <p className="tooltip-pct">{real.value.toFixed(2)}%</p>}
+      {real?.value != null && (
+        <>
+          <p className="tooltip-pct">{real.value.toFixed(2)}%</p>
+          {rank != null && <p className="tooltip-rank">#{rank}</p>}
+        </>
+      )}
       {pred?.value != null && label !== connectionYear && (
         <p className="tooltip-pct" style={{ color: predictionColor }}>
           {pred.value.toFixed(2)}% predicted
@@ -126,9 +132,9 @@ export default function NameChart({ name, data, birthYear, gender, predictionDat
             tickFormatter={v => `${v}%`}
             tick={{ fontSize: 12, fill: '#767676' }}
             tickLine={false}
+            niceTicks={'snap125'}
             axisLine={false}
-            width={38}
-            domain={[0, yMax * 1.15]}
+            domain={[0, parseFloat((yMax * 1.15).toFixed(2))]}
           />
           <Tooltip content={<CustomTooltip predictionColor={predColor} connectionYear={birthYear} />} cursor={{ stroke: '#ccc' }} />
           {birthYear && (
