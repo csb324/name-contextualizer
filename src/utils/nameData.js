@@ -52,33 +52,41 @@ function interpolateNulls(values) {
   return result
 }
 
+// Builds the target name's trailing window of windowSize years ending at refYear,
+// interpolates gaps, and normalizes by the window mean. Returns null if there isn't
+// enough real data (< 60% coverage) or the mean is zero.
+function buildTargetWindow(targetYearData, refYear, windowSize) {
+  const raw = []
+  for (let i = windowSize - 1; i >= 0; i--) {
+    const entry = targetYearData?.[String(refYear - i)]
+    raw.push(entry ? entry[2] : null)
+  }
+  if (raw.filter(v => v !== null).length < Math.ceil(windowSize * 0.6)) return null
+  const filled = interpolateNulls(raw)
+  const mean = filled.reduce((a, b) => a + b, 0) / windowSize
+  if (mean === 0) return null
+  return { norm: filled.map(v => v / mean), mean }
+}
+
+// Scores a candidate window against the already-normalized target window.
+// Both windows are divided by the TARGET's mean — so magnitude is compared, not just shape.
+// Score = 1 / (1 + RMS_distance), ranging from 0 (no match) to 1 (perfect match).
+function rmsScore(candidateRaw, targetNorm, targetMean, windowSize) {
+  const candidateNorm = interpolateNulls(candidateRaw).map(v => v / targetMean)
+  let sumSq = 0
+  for (let i = 0; i < windowSize; i++) sumSq += (targetNorm[i] - candidateNorm[i]) ** 2
+  return 1 / (1 + Math.sqrt(sumSq / windowSize))
+}
+
 // Finds names that had a similar popularity trajectory to the target name around a specific
 // comparison year (±maxOffset years). Used for the "Similarly Trending" display table — the
 // compareYear is chosen by the user for cultural context ("this name feels like the 1990s"),
 // so we deliberately stay close to that year rather than searching the whole dataset.
-//
-// Similarity is measured by RMS distance after normalizing both windows by the TARGET's mean
-// popularity — so a name at 0.1% won't match a name at 1.0% even if their shapes are identical.
-// Score = 1 / (1 + RMS_distance), ranging from 0 (no match) to 1 (perfect match).
 export function findSimilarTrajectory(targetYearData, refYear, allNameData, compareYear, excludeName, windowSize = 15, maxOffset = 5, limit = 5) {
-  // Build the target's trailing window: windowSize years of popularity % ending at refYear.
-  // Null means the name wasn't in the top 1000 that year.
-  const targetRaw = []
-  for (let i = windowSize - 1; i >= 0; i--) {
-    const entry = targetYearData?.[String(refYear - i)]
-    targetRaw.push(entry ? entry[2] : null)
-  }
-  // Require at least 60% of the window to have real data — otherwise the target itself
-  // is too obscure to find meaningful matches.
-  if (targetRaw.filter(v => v !== null).length < Math.ceil(windowSize * 0.6)) return []
-
-  const targetFilled = interpolateNulls(targetRaw)
-  // The mean popularity becomes our shared scale reference. Dividing both windows by this
-  // number means we compare shape AND relative magnitude — a name twice as popular will
-  // have values twice as large and score worse, not just look like a different shape.
-  const targetMean = targetFilled.reduce((a, b) => a + b, 0) / windowSize
-  if (targetMean === 0) return []
-  const targetNorm = targetFilled.map(v => v / targetMean)
+  const target = buildTargetWindow(targetYearData, refYear, windowSize)
+  if (!target) return []
+  const { norm: targetNorm, mean: targetMean } = target
+  const minRequired = Math.ceil(windowSize * 0.6)
 
   const results = []
   for (const [name, yearData] of Object.entries(allNameData)) {
@@ -95,15 +103,9 @@ export function findSimilarTrajectory(targetYearData, refYear, allNameData, comp
         const entry = yearData?.[String(anchorYear - i)]
         candidateRaw.push(entry ? entry[2] : null)
       }
-      if (candidateRaw.filter(v => v !== null).length < Math.ceil(windowSize * 0.6)) continue
+      if (candidateRaw.filter(v => v !== null).length < minRequired) continue
 
-      // Normalize candidate by the TARGET's mean, not its own — this preserves the
-      // magnitude comparison described above.
-      const candidateNorm = interpolateNulls(candidateRaw).map(v => v / targetMean)
-      let sumSq = 0
-      for (let i = 0; i < windowSize; i++) sumSq += (targetNorm[i] - candidateNorm[i]) ** 2
-      const score = 1 / (1 + Math.sqrt(sumSq / windowSize))
-
+      const score = rmsScore(candidateRaw, targetNorm, targetMean, windowSize)
       if (score > bestScore) {
         bestScore = score
         bestMatchYear = anchorYear
@@ -138,18 +140,9 @@ export function findSimilarTrajectory(targetYearData, refYear, allNameData, comp
 // single best-scoring year for that name. So the output is still one entry per name,
 // just with its historically optimal match point rather than one near compareYear.
 export function findBestAnalogues(targetYearData, refYear, allNameData, excludeName, windowSize = 10, maxAnchor = 2015, limit = 15) {
-  // Same window + normalization setup as findSimilarTrajectory.
-  const targetRaw = []
-  for (let i = windowSize - 1; i >= 0; i--) {
-    const entry = targetYearData?.[String(refYear - i)]
-    targetRaw.push(entry ? entry[2] : null)
-  }
-  if (targetRaw.filter(v => v !== null).length < Math.ceil(windowSize * 0.6)) return []
-
-  const targetFilled = interpolateNulls(targetRaw)
-  const targetMean = targetFilled.reduce((a, b) => a + b, 0) / windowSize
-  if (targetMean === 0) return []
-  const targetNorm = targetFilled.map(v => v / targetMean)
+  const target = buildTargetWindow(targetYearData, refYear, windowSize)
+  if (!target) return []
+  const { norm: targetNorm, mean: targetMean } = target
   const minRequired = Math.ceil(windowSize * 0.6)
 
   const results = []
@@ -170,11 +163,7 @@ export function findBestAnalogues(targetYearData, refYear, allNameData, excludeN
       }
       if (nonNull < minRequired) continue
 
-      const candidateNorm = interpolateNulls(candidateRaw).map(v => v / targetMean)
-      let sumSq = 0
-      for (let i = 0; i < windowSize; i++) sumSq += (targetNorm[i] - candidateNorm[i]) ** 2
-      const score = 1 / (1 + Math.sqrt(sumSq / windowSize))
-
+      const score = rmsScore(candidateRaw, targetNorm, targetMean, windowSize)
       // Keep only this name's single best anchor year.
       if (score > bestScore) {
         bestScore = score
@@ -213,7 +202,7 @@ export function computePrediction(targetYearData, refYear, allNameData, matches,
       if (!anchorPct) continue
       const futurePct = allNameData[match.name]?.[String(match.matchYear + k)]?.[2]
       // Skip this analogue for this year if it has no data — don't assume zero.
-      if (futurePct === undefined) continue
+      if (futurePct == null) continue
       // ratio = how much the analogue changed k years after its match point
       weightedSum += (futurePct / anchorPct) * match.score
       totalWeight += match.score

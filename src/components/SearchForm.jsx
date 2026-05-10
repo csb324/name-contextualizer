@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function SearchForm({ years, onSearch, initialQuery }) {
   const latestYear = years.length ? Math.max(...years) : ''
   const [name, setName] = useState(initialQuery?.name ?? '')
   const [refYear, setRefYear] = useState(initialQuery ? String(initialQuery.refYear) : (latestYear ? String(latestYear) : ''))
   const [compareYear, setCompareYear] = useState(initialQuery ? String(initialQuery.compareYear) : '')
+
+  useEffect(() => {
+    if (!initialQuery) return
+    setName(initialQuery.name)
+    setRefYear(String(initialQuery.refYear))
+    setCompareYear(String(initialQuery.compareYear))
+  }, [initialQuery?.name, initialQuery?.refYear, initialQuery?.compareYear])
 
   function handleSwap() {
     setRefYear(compareYear)

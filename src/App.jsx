@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import SearchForm from './components/SearchForm'
 import Results from './components/Results'
+import ErrorBoundary from './components/ErrorBoundary'
 import { buildByYear } from './utils/nameData'
 
 function queryFromURL() {
@@ -19,7 +20,6 @@ export default function App() {
   const [boysData, setBoysData] = useState(null)
   const [loadError, setLoadError] = useState(null)
   const [query, setQuery] = useState(() => queryFromURL())
-  const [formKey, setFormKey] = useState(0)
 
   useEffect(() => {
     Promise.all([
@@ -37,9 +37,7 @@ export default function App() {
 
   useEffect(() => {
     function onPop() {
-      const q = queryFromURL()
-      setQuery(q)
-      setFormKey(k => k + 1)
+      setQuery(queryFromURL())
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
@@ -54,7 +52,6 @@ export default function App() {
   function handleNameClick(name) {
     if (!query) return
     navigate({ name, refYear: query.compareYear, compareYear: query.refYear })
-    setFormKey(k => k + 1)
   }
 
   const byYearGirls = useMemo(() => buildByYear(girlsData?.data), [girlsData])
@@ -74,17 +71,19 @@ export default function App() {
         {loadError && <p className="status error">{loadError}</p>}
         {!loading && !loadError && (
           <>
-            <SearchForm key={formKey} years={years} onSearch={navigate} initialQuery={query} />
+            <SearchForm years={years} onSearch={navigate} initialQuery={query} />
             {query && (
-              <Results
-                key={`${query.name}-${query.refYear}-${query.compareYear}`}
-                query={query}
-                girlsData={girlsData}
-                boysData={boysData}
-                byYearGirls={byYearGirls}
-                byYearBoys={byYearBoys}
-                onNameClick={handleNameClick}
-              />
+              <ErrorBoundary resetKey={`${query.name}-${query.refYear}-${query.compareYear}`}>
+                <Results
+                  key={`${query.name}-${query.refYear}-${query.compareYear}`}
+                  query={query}
+                  girlsData={girlsData}
+                  boysData={boysData}
+                  byYearGirls={byYearGirls}
+                  byYearBoys={byYearBoys}
+                  onNameClick={handleNameClick}
+                />
+              </ErrorBoundary>
             )}
           </>
         )}
