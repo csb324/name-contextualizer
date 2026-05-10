@@ -72,6 +72,7 @@ export default function App() {
         {!loading && !loadError && (
           <>
             <SearchForm years={years} onSearch={navigate} initialQuery={query} />
+                        
             {query && (
               <ErrorBoundary resetKey={`${query.name}-${query.refYear}-${query.compareYear}`}>
                 <Results
@@ -85,6 +86,24 @@ export default function App() {
                 />
               </ErrorBoundary>
             )}
+
+
+            <div className="intro">
+              <p className="intro-lead">What does a baby name really mean?</p>
+              <p>
+                Rank alone doesn't tell you. The name landscape has fragmented over the decades. Any given name accounts for a smaller share of babies 
+                than the same rank would have meant in earlier years.                  
+              </p>
+              <p>
+                In 1990, approximately 2.45% of baby girls were named Jessica. It was the #1 name. This year, the #1 name 
+                for baby girls is Olivia, but only 0.84% of girls born last year were given that name. Olivia may be "Most Popular",
+                but it only feels as popular as a 1990 Amber, Rachel, or Courtney.
+              </p>
+              <p>
+                Enter the name you're considering, the year to look it up in, and a year to compare against — usually the year you were born. You'll see which names from that year carried the same weight, which names had a similar rise or fall, and where the name might be headed.
+              </p>
+            </div>
+
           </>
         )}
       </main>

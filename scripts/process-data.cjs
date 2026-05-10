@@ -15,6 +15,7 @@ const OUTPUT_DIR = path.join(ROOT, 'public', 'data');
 const ZIP_URL = 'https://www.ssa.gov/oact/babynames/names.zip';
 const START_YEAR = 1925;
 const TOP_N = 1000;
+const TOTAL_BIRTHS_PATH = path.join(TMP_DIR, 'total-births.json');
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -81,6 +82,10 @@ async function main() {
     `Processing ${availableYears.length} years (${availableYears[0]}–${availableYears[availableYears.length - 1]})...`
   );
 
+  const totalBirths = fs.existsSync(TOTAL_BIRTHS_PATH)
+    ? JSON.parse(fs.readFileSync(TOTAL_BIRTHS_PATH, 'utf8'))
+    : {};
+
   const girlsOutput = { years: availableYears, data: {} };
   const boysOutput = { years: availableYears, data: {} };
 
@@ -89,8 +94,8 @@ async function main() {
     const { girls, boys } = parseYearFile(filePath);
     const yearStr = String(year);
 
-    const girlTotal = girls.reduce((s, r) => s + r.count, 0);
-    const boyTotal = boys.reduce((s, r) => s + r.count, 0);
+    const girlTotal = totalBirths[yearStr]?.girls ?? girls.reduce((s, r) => s + r.count, 0);
+    const boyTotal = totalBirths[yearStr]?.boys ?? boys.reduce((s, r) => s + r.count, 0);
 
     girls.slice(0, TOP_N).forEach((r, i) => {
       if (!girlsOutput.data[r.name]) girlsOutput.data[r.name] = {};
