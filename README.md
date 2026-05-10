@@ -1,4 +1,4 @@
-# Baby Name Contextualizer
+# [Baby Name Contextualizer](https://babynamecontextualizer.com)
 
 ![Screenshot of Baby Name Contextualizer showing Sophia in 2025 with comparables from 1992](screenshot.png)
 
